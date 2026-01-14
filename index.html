@@ -1,0 +1,1149 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="のびしる｜伸び代カルテ。点数じゃなく、"伸びる力"を見える化。個別指導塾の面談で使えるA4レポートを自動生成。まずはPoC（20名）から。" />
+  <title>のびしる｜伸び代カルテ（個別指導塾向け）</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+  
+  <style>
+    :root{
+      --bg:#ffffff;
+      --ink:#0f172a;
+      --muted:#475569;
+      --line:#e2e8f0;
+      --card:#f8fafc;
+      --brand:#0f766e;
+      --brand-light:#14b8a6;
+      --accent:#84cc16;
+      --accent-dark:#65a30d;
+      --shadow-sm: 0 2px 8px rgba(15,118,110,.08);
+      --shadow: 0 10px 40px rgba(15,118,110,.12);
+      --shadow-lg: 0 20px 60px rgba(15,118,110,.18);
+      --radius: 20px;
+      --radius-sm: 12px;
+      --max: 1200px;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    *{ 
+      box-sizing:border-box; 
+      margin:0;
+      padding:0;
+    }
+    
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    @keyframes gradient-shift {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+    
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 20px rgba(132,204,22,.3); }
+      50% { box-shadow: 0 0 40px rgba(132,204,22,.6); }
+    }
+    
+    body{
+      margin:0;
+      font-family: 'Noto Sans JP', "Yu Gothic", "Hiragino Kaku Gothic ProN", system-ui, -apple-system, sans-serif;
+      color:var(--ink);
+      background:var(--bg);
+      line-height:1.7;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    
+    a{ 
+      color:inherit; 
+      text-decoration:none;
+      transition: var(--transition);
+    }
+    
+    .wrap{ 
+      width:min(var(--max), calc(100% - 48px)); 
+      margin:0 auto; 
+    }
+    
+    /* Enhanced Button Styles */
+    .btn{
+      display:inline-flex; 
+      align-items:center; 
+      justify-content:center;
+      padding:16px 32px; 
+      border-radius:var(--radius-sm); 
+      font-weight:700;
+      font-size:15px;
+      border:2px solid transparent; 
+      cursor:pointer;
+      transition: var(--transition);
+      white-space:nowrap;
+      position: relative;
+      overflow: hidden;
+      text-shadow: 0 1px 2px rgba(0,0,0,.1);
+    }
+    
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255,255,255,.2);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+    
+    .btn:hover::before {
+      width: 300px;
+      height: 300px;
+    }
+    
+    .btn:active{ 
+      transform:scale(0.98); 
+    }
+    
+    .btn.primary{ 
+      background: linear-gradient(135deg, var(--brand) 0%, var(--brand-light) 100%);
+      color:#fff; 
+      box-shadow: var(--shadow);
+      border-color: var(--brand);
+    }
+    
+    .btn.primary:hover{ 
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-2px);
+    }
+    
+    .btn.ghost{ 
+      background:#fff; 
+      border-color:var(--line); 
+      color:var(--ink);
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .btn.ghost:hover{ 
+      background:#f1f5f9; 
+      border-color:var(--brand);
+      box-shadow: var(--shadow);
+      transform: translateY(-2px);
+    }
+    
+    /* Enhanced Pill Badge */
+    .pill{
+      display:inline-flex; 
+      gap:10px; 
+      align-items:center;
+      padding:10px 20px; 
+      border-radius:999px; 
+      background: linear-gradient(135deg, rgba(132,204,22,.15), rgba(132,204,22,.08));
+      color:#365314; 
+      font-weight:700; 
+      font-size:14px;
+      border:2px solid rgba(132,204,22,.3);
+      box-shadow: 0 4px 12px rgba(132,204,22,.2);
+      animation: pulse-glow 3s infinite;
+    }
+    
+    .pill::before {
+      content: '✨';
+      font-size: 16px;
+    }
+
+    /* Enhanced Header */
+    header{
+      position:sticky; 
+      top:0; 
+      z-index:100;
+      background:rgba(255,255,255,.92);
+      backdrop-filter: blur(20px) saturate(180%);
+      border-bottom:1px solid var(--line);
+      box-shadow: 0 4px 20px rgba(15,118,110,.05);
+    }
+    
+    .nav{
+      display:flex; 
+      align-items:center; 
+      justify-content:space-between;
+      padding:16px 0;
+      gap:20px;
+    }
+    
+    .brand{
+      display:flex; 
+      align-items:center; 
+      gap:14px; 
+      min-width:240px;
+      transition: var(--transition);
+    }
+    
+    .brand:hover {
+      transform: scale(1.02);
+    }
+    
+    .brand .logo{
+      width:48px; 
+      height:48px; 
+      border-radius:14px;
+      background: linear-gradient(135deg, var(--brand) 0%, var(--brand-light) 50%, var(--accent) 100%);
+      background-size: 200% 200%;
+      animation: gradient-shift 4s ease infinite;
+      position:relative;
+      overflow:hidden;
+      box-shadow: var(--shadow);
+    }
+    
+    .brand .logo::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(255,255,255,.3), transparent);
+      transform: rotate(45deg);
+      animation: shine 3s infinite;
+    }
+    
+    @keyframes shine {
+      0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+      100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+    }
+    
+    .brand .logo::after{
+      content:""; 
+      position:absolute; 
+      right:10px; 
+      top:10px; 
+      width:14px; 
+      height:14px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+      border-radius:999px; 
+      transform:rotate(10deg);
+      box-shadow: -10px 8px 0 rgba(132,204,22,.5), 0 0 20px rgba(132,204,22,.4);
+      opacity:.95;
+      animation: float 3s ease-in-out infinite;
+    }
+    
+    .brand strong{ 
+      font-size:20px; 
+      letter-spacing:.02em;
+      background: linear-gradient(135deg, var(--brand), var(--brand-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .brand small{ 
+      display:block; 
+      color:var(--muted); 
+      font-size:13px; 
+      margin-top:2px;
+      font-weight: 500;
+    }
+    
+    .navlinks{
+      display:flex; 
+      gap:8px; 
+      flex-wrap:wrap; 
+      align-items:center; 
+      justify-content:flex-end;
+    }
+    
+    .navlinks a{
+      font-size:14px; 
+      color:var(--muted);
+      padding:10px 16px; 
+      border-radius:var(--radius-sm);
+      font-weight: 600;
+      position: relative;
+    }
+    
+    .navlinks a::after {
+      content: '';
+      position: absolute;
+      bottom: 8px;
+      left: 16px;
+      right: 16px;
+      height: 2px;
+      background: var(--brand);
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
+    
+    .navlinks a:hover{ 
+      background:rgba(15,118,110,.08); 
+      color:var(--brand);
+    }
+    
+    .navlinks a:hover::after {
+      transform: scaleX(1);
+    }
+    
+    .navcta{ 
+      display:flex; 
+      gap:12px; 
+      align-items:center; 
+    }
+
+    /* Enhanced Hero Section */
+    .hero{
+      padding:80px 0 60px;
+      background:
+        radial-gradient(1200px 500px at 20% 10%, rgba(15,118,110,.15), transparent 70%),
+        radial-gradient(1200px 500px at 80% 0%, rgba(132,204,22,.12), transparent 70%),
+        linear-gradient(180deg, rgba(248,250,252,0) 0%, rgba(248,250,252,1) 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: 
+        repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(15,118,110,.02) 2px, rgba(15,118,110,.02) 4px),
+        repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(15,118,110,.02) 2px, rgba(15,118,110,.02) 4px);
+      animation: grid-move 20s linear infinite;
+      pointer-events: none;
+    }
+    
+    @keyframes grid-move {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(40px, 40px); }
+    }
+    
+    .grid2{ 
+      display:grid; 
+      grid-template-columns: 1.2fr .8fr; 
+      gap:40px; 
+      align-items:start;
+      position: relative;
+      z-index: 1;
+    }
+    
+    @media (max-width: 920px){ 
+      .grid2{ grid-template-columns: 1fr; } 
+      .navlinks{ display:none; }
+      .hero { padding: 60px 0 40px; }
+    }
+    
+    h1{ 
+      font-size:52px; 
+      line-height:1.2; 
+      margin:20px 0 16px; 
+      letter-spacing:-.02em;
+      font-weight: 900;
+      animation: fadeInUp 0.8s ease-out;
+      background: linear-gradient(135deg, var(--ink) 0%, var(--brand) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .lead{ 
+      font-size:18px; 
+      color:var(--muted); 
+      margin:0 0 28px;
+      line-height: 1.8;
+      animation: fadeInUp 0.8s ease-out 0.2s both;
+    }
+    
+    .tagline{ 
+      font-weight:800; 
+      color:var(--brand);
+      position: relative;
+      padding: 0 4px;
+    }
+    
+    .hero-actions{ 
+      display:flex; 
+      gap:14px; 
+      flex-wrap:wrap; 
+      align-items:center;
+      animation: fadeInUp 0.8s ease-out 0.4s both;
+    }
+    
+    .hero-bullets{
+      display:flex; 
+      gap:12px; 
+      flex-wrap:wrap; 
+      margin-top:24px; 
+      color:var(--muted); 
+      font-size:14px;
+      animation: fadeInUp 0.8s ease-out 0.6s both;
+    }
+    
+    .hero-bullets span{
+      border:2px solid var(--line); 
+      background:#fff; 
+      border-radius:999px;
+      padding:10px 18px;
+      font-weight: 600;
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition);
+    }
+    
+    .hero-bullets span:hover {
+      border-color: var(--brand);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+    }
+
+    /* Enhanced Cards / Sections */
+    section{ 
+      padding:80px 0; 
+      border-top:1px solid var(--line);
+      position: relative;
+    }
+    
+    section:first-of-type{ border-top:none; }
+    
+    .sec-head{ 
+      margin-bottom:40px;
+      text-align: center;
+    }
+    
+    .sec-head h2{ 
+      font-size:42px; 
+      margin:0 0 16px; 
+      letter-spacing:-.01em;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--ink) 0%, var(--brand) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .sec-head p{ 
+      margin:0; 
+      color:var(--muted);
+      font-size: 18px;
+      line-height: 1.8;
+    }
+
+    .cards{ 
+      display:grid; 
+      grid-template-columns: repeat(3, 1fr); 
+      gap:24px; 
+    }
+    
+    @media (max-width: 920px){ 
+      .cards{ grid-template-columns: 1fr; }
+      h1 { font-size: 36px; }
+      .sec-head h2 { font-size: 32px; }
+    }
+    
+    .card{
+      background:#fff;
+      border:2px solid var(--line); 
+      border-radius:var(--radius);
+      padding:32px; 
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--brand), var(--brand-light), var(--accent));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.5s ease;
+    }
+    
+    .card:hover::before {
+      transform: scaleX(1);
+    }
+    
+    .card:hover{
+      border-color: var(--brand);
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-8px);
+    }
+    
+    .card h3{ 
+      margin:0 0 12px; 
+      font-size:20px;
+      font-weight: 800;
+      color: var(--ink);
+    }
+    
+    .card p{ 
+      margin:0; 
+      color:var(--muted); 
+      font-size:15px;
+      line-height: 1.7;
+    }
+
+    .split{
+      display:grid; 
+      grid-template-columns: 1fr 1fr; 
+      gap:40px; 
+      align-items:center;
+    }
+    
+    @media (max-width: 920px){ 
+      .split{ grid-template-columns: 1fr; } 
+    }
+    
+    .shot{
+      width:100%; 
+      border-radius:var(--radius); 
+      border:2px solid var(--line);
+      background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      min-height:320px;
+      display:flex; 
+      align-items:center; 
+      justify-content:center;
+      color:var(--muted); 
+      font-weight:700;
+      font-size: 18px;
+      position: relative;
+      transition: var(--transition);
+    }
+    
+    .shot:hover {
+      box-shadow: var(--shadow-lg);
+      transform: scale(1.02);
+    }
+    
+    .shot::before {
+      content: '📊';
+      font-size: 64px;
+      position: absolute;
+      opacity: 0.3;
+    }
+    
+    .shot img{ 
+      width:100%; 
+      height:auto; 
+      display:block; 
+    }
+
+    .steps{ 
+      display:grid; 
+      grid-template-columns: repeat(4, 1fr); 
+      gap:20px; 
+    }
+    
+    @media (max-width: 920px){ 
+      .steps{ grid-template-columns: 1fr; } 
+    }
+    
+    .step{
+      padding:28px; 
+      border-radius:var(--radius);
+      border:2px solid var(--line); 
+      background:#fff;
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition);
+      position: relative;
+    }
+    
+    .step:hover {
+      border-color: var(--brand);
+      box-shadow: var(--shadow);
+      transform: translateY(-4px);
+    }
+    
+    .step b{ 
+      display:inline-flex; 
+      width:40px; 
+      height:40px; 
+      border-radius:12px;
+      align-items:center; 
+      justify-content:center; 
+      background: linear-gradient(135deg, rgba(15,118,110,.15), rgba(15,118,110,.08));
+      color:var(--brand);
+      font-size: 18px;
+      font-weight: 900;
+      box-shadow: 0 4px 12px rgba(15,118,110,.2);
+    }
+    
+    .step h3{ 
+      margin:16px 0 10px; 
+      font-size:18px;
+      font-weight: 800;
+    }
+    
+    .step p{ 
+      margin:0; 
+      color:var(--muted); 
+      font-size:14px;
+      line-height: 1.7;
+    }
+
+    .pricing{
+      display:grid; 
+      grid-template-columns: 1.1fr .9fr; 
+      gap:32px; 
+      align-items:stretch;
+    }
+    
+    @media (max-width: 920px){ 
+      .pricing{ grid-template-columns: 1fr; } 
+    }
+    
+    .pricebox{
+      background: linear-gradient(180deg, rgba(15,118,110,.12) 0%, rgba(255,255,255,1) 60%);
+      border:2px solid rgba(15,118,110,.3);
+      border-radius:var(--radius);
+      padding:40px;
+      box-shadow: var(--shadow-lg);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .pricebox::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(132,204,22,.1) 0%, transparent 70%);
+      animation: float 6s ease-in-out infinite;
+    }
+    
+    .pricebox:hover {
+      transform: scale(1.02);
+      box-shadow: 0 30px 80px rgba(15,118,110,.25);
+    }
+    
+    .price{
+      font-size:48px; 
+      font-weight:900; 
+      letter-spacing:-.02em;
+      margin:16px 0 8px;
+      background: linear-gradient(135deg, var(--brand), var(--brand-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .ul{ 
+      margin:20px 0 0; 
+      padding-left:24px; 
+      color:var(--muted);
+      position: relative;
+      z-index: 1;
+    }
+    
+    .ul li{ 
+      margin:10px 0;
+      line-height: 1.7;
+    }
+    
+    .note{ 
+      color:var(--muted); 
+      font-size:13px; 
+      margin-top:16px;
+      line-height: 1.6;
+    }
+
+    .faq{
+      display:grid; 
+      grid-template-columns: 1fr 1fr; 
+      gap:20px;
+    }
+    
+    @media (max-width: 920px){ 
+      .faq{ grid-template-columns: 1fr; } 
+    }
+    
+    details{
+      border:2px solid var(--line); 
+      border-radius:var(--radius);
+      padding:20px 24px; 
+      background:#fff;
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition);
+    }
+    
+    details:hover {
+      border-color: var(--brand);
+      box-shadow: var(--shadow);
+    }
+    
+    details[open] {
+      border-color: var(--brand);
+      box-shadow: var(--shadow-lg);
+    }
+    
+    summary{ 
+      cursor:pointer; 
+      font-weight:800;
+      font-size: 16px;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    summary::before {
+      content: '▶';
+      color: var(--brand);
+      transition: transform 0.3s ease;
+      font-size: 12px;
+    }
+    
+    details[open] summary::before {
+      transform: rotate(90deg);
+    }
+    
+    summary::-webkit-details-marker {
+      display: none;
+    }
+    
+    details p{ 
+      margin:16px 0 0; 
+      color:var(--muted);
+      line-height: 1.7;
+    }
+
+    /* Enhanced Contact Section */
+    .contact{
+      background: 
+        radial-gradient(1000px 400px at 10% 0%, rgba(132,204,22,.12), transparent 60%),
+        radial-gradient(1000px 400px at 90% 0%, rgba(15,118,110,.15), transparent 60%),
+        linear-gradient(180deg, rgba(248,250,252,0) 0%, rgba(248,250,252,1) 100%);
+    }
+    
+    form{
+      background:#fff; 
+      border:2px solid var(--line); 
+      border-radius:var(--radius);
+      padding:40px; 
+      box-shadow: var(--shadow-lg);
+    }
+    
+    label{ 
+      display:block; 
+      font-weight:700; 
+      font-size:14px; 
+      margin:20px 0 10px;
+      color: var(--ink);
+    }
+    
+    input, textarea{
+      width:100%; 
+      padding:14px 16px;
+      border-radius:var(--radius-sm); 
+      border:2px solid var(--line);
+      font: inherit;
+      outline:none;
+      transition: var(--transition);
+      background: #fafafa;
+    }
+    
+    input:focus, textarea:focus{ 
+      border-color: var(--brand); 
+      box-shadow: 0 0 0 4px rgba(15,118,110,.12);
+      background: #fff;
+    }
+    
+    textarea{ 
+      min-height:140px; 
+      resize:vertical; 
+    }
+    
+    footer{ 
+      padding:40px 0; 
+      color:var(--muted); 
+      font-size:13px; 
+      border-top:1px solid var(--line);
+      text-align: center;
+      background: var(--card);
+    }
+
+    /* Enhanced CTA Band */
+    .ctaband{
+      margin-top:24px;
+      display:flex; 
+      gap:14px; 
+      flex-wrap:wrap; 
+      align-items:center;
+      padding:24px; 
+      border-radius:var(--radius);
+      border:2px solid var(--line); 
+      background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+      box-shadow: var(--shadow);
+    }
+    
+    /* Icon Decorations */
+    .icon-check::before {
+      content: '✓';
+      color: var(--accent);
+      font-weight: 900;
+      margin-right: 8px;
+    }
+    
+    /* Smooth Scroll */
+    html {
+      scroll-behavior: smooth;
+    }
+    
+    /* Loading Animation */
+    @keyframes shimmer {
+      0% { background-position: -1000px 0; }
+      100% { background-position: 1000px 0; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <div class="brand">
+      <div class="logo" aria-hidden="true"></div>
+      <div>
+        <strong>のびしる</strong>
+        <small>伸び代カルテ｜個別指導塾向け</small>
+      </div>
+    </div>
+
+    <nav class="navlinks" aria-label="ページ内ナビゲーション">
+      <a href="#problem">課題</a>
+      <a href="#report">A4レポート</a>
+      <a href="#how">使い方</a>
+      <a href="#poc">PoC</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+
+    <div class="navcta">
+      <a class="btn ghost" href="#contact">A4サンプル</a>
+      <a class="btn primary" href="#contact">PoC（20名）相談</a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- HERO -->
+  <section class="hero" aria-label="ヒーロー">
+    <div class="wrap grid2">
+      <div>
+        <span class="pill">点数じゃなく、"伸びる力"を見える化。</span>
+        <h1>面談で使える<br>「伸び代カルテ（A4）」を自動生成。</h1>
+        <p class="lead">
+          個別指導の<strong class="tagline">説明の属人化</strong>と、保護者の<strong class="tagline">「成果が見えない不安」</strong>を、
+          6軸 × 誤答傾向 × 次の一手で解消します。
+        </p>
+
+        <div class="hero-actions">
+          <a class="btn primary" href="#contact">PoC（20名）を相談する</a>
+          <a class="btn ghost" href="#contact">A4サンプルを受け取る</a>
+          <a class="btn ghost" href="#contact">15分デモを依頼する</a>
+        </div>
+
+        <div class="hero-bullets" aria-label="要点">
+          <span>⏱️ 所要時間：約15分</span>
+          <span>🏠 自宅/教室どちらでも受検OK</span>
+          <span>🔒 匿名ID運用（個人情報を最小化）</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>🎯 ここが一番大事：成果物が強い</h3>
+        <p>"口で説明"を減らし、A4で「納得」をつくります。まずはサンプルを見てください。</p>
+        <div style="height:20px"></div>
+        <div class="shot" role="img" aria-label="A4サンプル（差し替え）">
+          <!-- 例： <img src="assets/a4-sample.png" alt="伸び代カルテ（A4）サンプル"> -->
+          A4サンプル画像（ここに差し替え）
+        </div>
+        <div style="height:20px"></div>
+        <div class="ctaband">
+          <a class="btn primary" href="#contact">A4サンプルを受け取る</a>
+          <a class="btn ghost" href="#contact">PoC（20名）相談</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROBLEM -->
+  <section id="problem">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>💡 個別指導の"見えない"課題</h2>
+        <p>保護者は「成果」を、講師は「説明の武器」を求めています。</p>
+      </div>
+
+      <div class="cards">
+        <div class="card">
+          <h3>📉 説明が属人化</h3>
+          <p>「頑張ってます」「理解してます」だけでは、保護者の不安は消えません。</p>
+        </div>
+        <div class="card">
+          <h3>😰 成果が見えない</h3>
+          <p>テストまで待つしかない。途中経過を"見える化"する手段がない。</p>
+        </div>
+        <div class="card">
+          <h3>⏰ 面談準備が大変</h3>
+          <p>一人ひとりの資料を手作業で作る時間はない。でも何もないと不安。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REPORT -->
+  <section id="report" style="background: linear-gradient(180deg, rgba(248,250,252,0) 0%, rgba(248,250,252,1) 100%);">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>📊 A4レポートが全てを変える</h2>
+        <p>6軸レーダー × 誤答傾向 × 次の一手を1枚に。</p>
+      </div>
+
+      <div class="split">
+        <div>
+          <h3 style="font-size:28px; margin-bottom:16px; font-weight:900;">✨ 3つの強み</h3>
+          <div class="cards" style="grid-template-columns:1fr; gap:16px;">
+            <div class="card">
+              <h3 class="icon-check">6軸で"伸びる力"を可視化</h3>
+              <p>点数だけでなく、思考力・計算力・読解力など6つの軸で分析。</p>
+            </div>
+            <div class="card">
+              <h3 class="icon-check">誤答傾向を自動分類</h3>
+              <p>「ケアレスミス」「概念理解不足」など、どこでつまずいたかが一目瞭然。</p>
+            </div>
+            <div class="card">
+              <h3 class="icon-check">次の一手を提案</h3>
+              <p>「まず◯◯から復習」「◯◯の演習を増やす」など、具体的なアクションを提示。</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="shot" role="img" aria-label="レポートサンプル">
+          <!-- <img src="assets/report-sample.png" alt="A4レポートサンプル"> -->
+          📄 レポート画像（差し替え）
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW -->
+  <section id="how">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>🚀 使い方はシンプル4ステップ</h2>
+        <p>受検から面談まで、最短1日で完結。</p>
+      </div>
+
+      <div class="steps">
+        <div class="step">
+          <b>1</b>
+          <h3>📱 受検URL送付</h3>
+          <p>生徒にURLを共有。自宅でも教室でも、スマホ・タブレット・PCで受検可能。</p>
+        </div>
+        <div class="step">
+          <b>2</b>
+          <h3>✍️ 約15分で完了</h3>
+          <p>選択式＋記述式の診断テスト。途中保存もOK。</p>
+        </div>
+        <div class="step">
+          <b>3</b>
+          <h3>🤖 自動でA4生成</h3>
+          <p>提出後、数分でA4レポートが完成。管理画面からダウンロード。</p>
+        </div>
+        <div class="step">
+          <b>4</b>
+          <h3>💬 面談で活用</h3>
+          <p>レポートを見せながら説明。保護者の納得度が劇的に向上。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PoC -->
+  <section id="poc" style="background: linear-gradient(180deg, rgba(248,250,252,0) 0%, rgba(248,250,252,1) 100%);">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>🎯 まずはPoC（20名）から</h2>
+        <p>小さく始めて、効果を確認してから本格導入。</p>
+      </div>
+
+      <div class="pricing">
+        <div class="pricebox">
+          <h3 style="font-size:24px; font-weight:900; margin-bottom:8px;">💎 PoC（20名）プラン</h3>
+          <p style="color:var(--muted); margin-bottom:12px;">まずは小規模で効果を実感。</p>
+          <div class="price">¥98,000<span style="font-size:20px; font-weight:600; color:var(--muted);">/20名</span></div>
+          <p style="color:var(--muted); font-size:15px;">（1名あたり ¥4,900）</p>
+
+          <ul class="ul">
+            <li class="icon-check">20名分の受検URL発行</li>
+            <li class="icon-check">A4レポート自動生成（20枚）</li>
+            <li class="icon-check">管理画面アクセス（1ヶ月）</li>
+            <li class="icon-check">15分オンボーディング</li>
+            <li class="icon-check">メール/チャットサポート</li>
+          </ul>
+
+          <div style="height:24px"></div>
+          <a class="btn primary" href="#contact" style="width:100%; font-size:16px;">PoC（20名）を相談する</a>
+          <p class="note">※完了回数課金。途中離脱は課金対象外にできます。</p>
+        </div>
+
+        <div>
+          <h3 style="font-size:24px; font-weight:900; margin-bottom:20px;">📋 PoC後の選択肢</h3>
+          <div class="cards" style="grid-template-columns:1fr; gap:16px;">
+            <div class="card">
+              <h3>🔄 継続プラン</h3>
+              <p>効果を実感したら、月額プランや年間プランに移行。ボリュームディスカウントあり。</p>
+            </div>
+            <div class="card">
+              <h3>🏫 複数校展開</h3>
+              <p>本部一括契約で、全校舎に展開。管理者向けダッシュボードも提供。</p>
+            </div>
+            <div class="card">
+              <h3>🎨 カスタマイズ</h3>
+              <p>独自問題の追加、レポートデザインの調整など、ご要望に応じて対応。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>❓ よくある質問</h2>
+        <p>導入前の不安を解消します。</p>
+      </div>
+
+      <div class="faq">
+        <details>
+          <summary>対象学年は？</summary>
+          <p>中学1年〜高校3年を想定していますが、小学校高学年や既卒生にも対応可能です。</p>
+        </details>
+        <details>
+          <summary>科目は？</summary>
+          <p>現在は数学・英語を中心に展開。理科・社会・国語も順次対応予定です。</p>
+        </details>
+        <details>
+          <summary>個人情報は？</summary>
+          <p>匿名ID運用が可能。氏名不要で、教室側で管理する番号だけで運用できます。</p>
+        </details>
+        <details>
+          <summary>A4レポートの形式は？</summary>
+          <p>PDF形式で提供。印刷してそのまま面談で使えます。データでの共有もOK。</p>
+        </details>
+        <details>
+          <summary>自宅でも受けられますか？</summary>
+          <p>可能です。自宅タブレット/スマホ、教室端末どちらでも同じ手順です。</p>
+        </details>
+        <details>
+          <summary>途中でやめた場合は？</summary>
+          <p>完了回数課金の設計なら、途中離脱は課金対象にしない運用が可能です。</p>
+        </details>
+        <details>
+          <summary>既存教材と併用できますか？</summary>
+          <p>できます。のびしるは教材ではなく「評価と面談の武器」です。</p>
+        </details>
+        <details>
+          <summary>サポート体制は？</summary>
+          <p>メール・チャットでの問い合わせ対応に加え、オンボーディング時に15分の説明会を実施します。</p>
+        </details>
+      </div>
+
+      <div class="ctaband">
+        <a class="btn primary" href="#contact">PoC（20名）を相談する</a>
+        <a class="btn ghost" href="#contact">15分デモを依頼する</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="contact">
+    <div class="wrap split">
+      <div>
+        <div class="sec-head" style="text-align: left;">
+          <h2>📮 お問い合わせ</h2>
+          <p>A4サンプル / 15分デモ / PoC相談</p>
+        </div>
+
+        <div class="cards" style="grid-template-columns:1fr; gap:16px;">
+          <div class="card">
+            <h3>🎯 おすすめの進め方</h3>
+            <p>
+              ① A4サンプル確認 → ② 15分デモ → ③ 対象20名決定 → ④ PoC開始
+            </p>
+          </div>
+          <div class="card">
+            <h3>✉️ 入力が面倒な場合</h3>
+            <p>「教室名・お名前・メール」だけでもOKにできます（フォーム項目は調整可能）。</p>
+          </div>
+        </div>
+      </div>
+
+      <form method="post" action="#">
+        <label for="org">ご所属（教室名/会社名）</label>
+        <input id="org" name="org" autocomplete="organization" placeholder="例：◯◯個別指導塾 ◯◯校" required>
+
+        <label for="name">お名前</label>
+        <input id="name" name="name" autocomplete="name" placeholder="例：山田 太郎" required>
+
+        <label for="email">メールアドレス</label>
+        <input id="email" name="email" type="email" autocomplete="email" placeholder="example@domain.jp" required>
+
+        <label for="tel">電話番号（任意）</label>
+        <input id="tel" name="tel" autocomplete="tel" placeholder="例：090-1234-5678">
+
+        <label for="type">ご希望（任意）</label>
+        <input id="type" name="type" placeholder="例：PoC相談 / A4サンプル / 15分デモ">
+
+        <label for="msg">相談内容</label>
+        <textarea id="msg" name="msg" placeholder="例：中2を中心に20名でPoC希望。面談でA4を使いたい。"></textarea>
+
+        <div style="height:20px"></div>
+        <button class="btn primary" type="submit" style="width:100%; font-size:16px;">📤 送信する</button>
+        <p class="note">送信ボタンを押すことで、プライバシーポリシーに同意したものとみなされます。</p>
+      </form>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div style="font-weight: 700; margin-bottom: 8px;">© のびしる｜伸び代カルテ</div>
+    <div>※本ページはPoC用の叩き台です。実績・導入事例・FAQは運用に合わせて更新します。</div>
+  </div>
+</footer>
+
+</body>
+</html>
