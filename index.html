@@ -197,7 +197,24 @@
       min-width:240px;
       transition: var(--transition);
     }
-    
+    /* ヘッダーの左上ロゴ（画像）を固定サイズにする */
+.brand { 
+  display: flex; 
+  align-items: center; 
+  gap: 10px; 
+}
+
+.brand .logo-img{
+  width: 40px;
+  height: 40px;
+  display: block;
+  object-fit: contain;
+  border-radius: 12px;
+  background: #fff;
+  border: 1px solid var(--line);
+  padding: 4px;
+}
+
     .brand:hover {
       transform: scale(1.02);
     }
@@ -831,12 +848,12 @@
 <header>
   <div class="wrap nav">
     <div class="brand">
-      <div class="logo" aria-hidden="true"></div>
-      <div>
-        <strong>のびしる</strong>
-        <small>伸び代カルテ｜個別指導塾向け</small>
-      </div>
-    </div>
+   <img class="logo-img" src="./assets/nobisiru_logo.png" alt="のびしる ロゴ">
+   <div>
+    <strong>のびしる</strong>
+    <small>伸び代カルテ｜個別指導塾向け</small>
+   </div>
+  </div>
 
     <nav class="navlinks" aria-label="ページ内ナビゲーション">
       <a href="#problem">課題</a>
@@ -848,7 +865,7 @@
 
     <div class="navcta">
       <a class="btn ghost" href="#contact">A4サンプル</a>
-      <a class="btn primary" href="#contact">PoC（20名）相談</a>
+      <a class="btn primary" href="#contact">PoC（10名）相談</a>
     </div>
   </div>
 </header>
@@ -866,7 +883,7 @@
         </p>
 
         <div class="hero-actions">
-          <a class="btn primary" href="#contact">PoC（20名）を相談する</a>
+          <a class="btn primary" href="#contact">PoC（10名）を相談する</a>
           <a class="btn ghost" href="#contact">A4サンプルを受け取る</a>
           <a class="btn ghost" href="#contact">15分デモを依頼する</a>
         </div>
@@ -889,7 +906,7 @@
         <div style="height:20px"></div>
         <div class="ctaband">
           <a class="btn primary" href="#contact">A4サンプルを受け取る</a>
-          <a class="btn ghost" href="#contact">PoC（20名）相談</a>
+          <a class="btn ghost" href="#contact">PoC（10名）相談</a>
         </div>
       </div>
     </div>
@@ -992,28 +1009,28 @@
   <section id="poc" style="background: linear-gradient(180deg, rgba(248,250,252,0) 0%, rgba(248,250,252,1) 100%);">
     <div class="wrap">
       <div class="sec-head">
-        <h2>🎯 まずはPoC（20名）から</h2>
+        <h2>🎯 まずはPoC（10名）から</h2>
         <p>小さく始めて、効果を確認してから本格導入。</p>
       </div>
 
       <div class="pricing">
         <div class="pricebox">
-          <h3 style="font-size:24px; font-weight:900; margin-bottom:8px;">💎 PoC（20名）プラン</h3>
+          <h3 style="font-size:24px; font-weight:900; margin-bottom:8px;">💎 PoC（10名）プラン</h3>
           <p style="color:var(--muted); margin-bottom:12px;">まずは小規模で効果を実感。</p>
-          <div class="price">¥98,000<span style="font-size:20px; font-weight:600; color:var(--muted);">/20名</span></div>
-          <p style="color:var(--muted); font-size:15px;">（1名あたり ¥4,900）</p>
+          <div class="price">¥24,800<span style="font-size:20px; font-weight:600; color:var(--muted);">/10名</span></div>
+          <p style="color:var(--muted); font-size:15px;">（1名あたり ¥2,480）</p>
 
           <ul class="ul">
-            <li class="icon-check">20名分の受検URL発行</li>
-            <li class="icon-check">A4レポート自動生成（20枚）</li>
+            <li class="icon-check">10名分の受検URL発行</li>
+            <li class="icon-check">A4レポート自動生成（10枚）</li>
             <li class="icon-check">管理画面アクセス（1ヶ月）</li>
             <li class="icon-check">15分オンボーディング</li>
             <li class="icon-check">メール/チャットサポート</li>
           </ul>
 
           <div style="height:24px"></div>
-          <a class="btn primary" href="#contact" style="width:100%; font-size:16px;">PoC（20名）を相談する</a>
-          <p class="note">※完了回数課金。途中離脱は課金対象外にできます。</p>
+          <a class="btn primary" href="#contact" style="width:100%; font-size:16px;">PoC（10名）を相談する</a>
+          <p class="note"></p>
         </div>
 
         <div>
@@ -1048,11 +1065,11 @@
       <div class="faq">
         <details>
           <summary>対象学年は？</summary>
-          <p>中学1年〜高校3年を想定していますが、小学校高学年や既卒生にも対応可能です。</p>
+          <p>小学3年〜中学3年を想定していますが、小学校低学年や高校生にも対応可能です。</p>
         </details>
         <details>
           <summary>科目は？</summary>
-          <p>現在は数学・英語を中心に展開。理科・社会・国語も順次対応予定です。</p>
+          <p>現在は数学・国語を中心に展開。理科・社会・英語も順次対応予定です。</p>
         </details>
         <details>
           <summary>個人情報は？</summary>
@@ -1068,7 +1085,7 @@
         </details>
         <details>
           <summary>途中でやめた場合は？</summary>
-          <p>完了回数課金の設計なら、途中離脱は課金対象にしない運用が可能です。</p>
+          <p>同じIDで再度受検が可能です。</p>
         </details>
         <details>
           <summary>既存教材と併用できますか？</summary>
@@ -1100,7 +1117,7 @@
           <div class="card">
             <h3>🎯 おすすめの進め方</h3>
             <p>
-              ① A4サンプル確認 → ② 15分デモ → ③ 対象20名決定 → ④ PoC開始
+              ① A4サンプル確認 → ② 15分デモ → ③ 対象10名決定 → ④ PoC開始
             </p>
           </div>
           <div class="card">
@@ -1110,29 +1127,35 @@
         </div>
       </div>
 
-      <form method="post" action="#">
-        <label for="org">ご所属（教室名/会社名）</label>
-        <input id="org" name="org" autocomplete="organization" placeholder="例：◯◯個別指導塾 ◯◯校" required>
+      <form name="contact" method="post" data-netlify="true" netlify-honeypot="bot-field">
+  <input type="hidden" name="form-name" value="contact">
+  <p style="display:none;">
+    <label>Don’t fill this out: <input name="bot-field"></label>
+  </p>
 
-        <label for="name">お名前</label>
-        <input id="name" name="name" autocomplete="name" placeholder="例：山田 太郎" required>
+  <label for="org">ご所属（教室名/会社名）</label>
+  <input id="org" name="org" autocomplete="organization" placeholder="例：◯◯個別指導塾 ◯◯校" required>
 
-        <label for="email">メールアドレス</label>
-        <input id="email" name="email" type="email" autocomplete="email" placeholder="example@domain.jp" required>
+  <label for="name">お名前</label>
+  <input id="name" name="name" autocomplete="name" placeholder="例：山田 太郎" required>
 
-        <label for="tel">電話番号（任意）</label>
-        <input id="tel" name="tel" autocomplete="tel" placeholder="例：090-1234-5678">
+  <label for="email">メールアドレス</label>
+  <input id="email" name="email" type="email" autocomplete="email" placeholder="example@domain.jp" required>
 
-        <label for="type">ご希望（任意）</label>
-        <input id="type" name="type" placeholder="例：PoC相談 / A4サンプル / 15分デモ">
+  <label for="tel">電話番号（任意）</label>
+  <input id="tel" name="tel" autocomplete="tel" placeholder="例：090-1234-5678">
 
-        <label for="msg">相談内容</label>
-        <textarea id="msg" name="msg" placeholder="例：中2を中心に20名でPoC希望。面談でA4を使いたい。"></textarea>
+  <label for="type">ご希望（任意）</label>
+  <input id="type" name="type" placeholder="例：PoC相談 / A4サンプル / 15分デモ">
 
-        <div style="height:20px"></div>
-        <button class="btn primary" type="submit" style="width:100%; font-size:16px;">📤 送信する</button>
-        <p class="note">送信ボタンを押すことで、プライバシーポリシーに同意したものとみなされます。</p>
-      </form>
+  <label for="msg">相談内容</label>
+  <textarea id="msg" name="msg" placeholder="例：中2を中心に10名でPoC希望。面談でA4を使いたい。"></textarea>
+
+  <div style="height:20px"></div>
+  <button class="btn primary" type="submit" style="width:100%; font-size:16px;">📩 送信する</button>
+  <p class="note">送信ボタンを押すことで、プライバシーポリシーに同意したものとみなされます。</p>
+</form>
+
     </div>
   </section>
 
