@@ -840,7 +840,40 @@
     @keyframes shimmer {
       0% { background-position: -1000px 0; }
       100% { background-position: 1000px 0; }
-    }
+    }/* 画像を枠に合わせてトリミングして表示 */
+.sample-box, .report-box{
+  width: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #fff;
+}
+
+/* 1つ目：A4サンプル（縦長） */
+.sample-box{
+  aspect-ratio: 4 / 3;     /* LPの枠が横長なら4/3、縦寄りなら3/4に */
+}
+
+.sample-img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;        /* はみ出た部分を自動トリミング */
+  object-position: 50% 0%;  /* 上寄せ（ヘッダーを見せたい） */
+  display: block;
+}
+
+/* 2つ目：レポート抜粋（見せたい箇所に合わせる） */
+.report-box{
+  aspect-ratio: 16 / 9;     /* 横長で見せると読みやすい */
+}
+
+.report-img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 30%; /* 中央より少し上を見せる */
+  display: block;
+}
+
   </style>
 </head>
 <body>
@@ -1176,5 +1209,6 @@
 
 </body>
 </html>
+
 
 
