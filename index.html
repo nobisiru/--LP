@@ -873,6 +873,24 @@
   object-position: 50% 30%; /* 中央より少し上を見せる */
   display: block;
 }
+/* サンプル画像の上に残るプレースホルダー/疑似要素を強制的に消す */
+.sample-box::before, .sample-box::after,
+.report-box::before, .report-box::after{
+  content: none !important;
+}
+
+/* placeholder系の要素が残っていたら非表示 */
+.sample-box .placeholder, .report-box .placeholder,
+.sample-box [class*="placeholder"], .report-box [class*="placeholder"]{
+  display: none !important;
+}
+
+/* 画像を最前面に */
+.sample-box img, .report-box img{
+  position: relative;
+  z-index: 2;
+  display: block;
+}
 
   </style>
 </head>
@@ -1205,6 +1223,7 @@
 
 </body>
 </html>
+
 
 
 
